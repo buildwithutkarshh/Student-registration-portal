@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Registration | Ignite Club</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjN2M1Y2ZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjJkM2VlIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTYiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMzMgMTBjMiA5LTYgMTItNiAyMCAwIDQgMyA2IDYgNy0xLTMgMS02IDMtOCA0IDQgNyA4IDcgMTNhMTEgMTEgMCAwMS0yMiAwYzAtNiA0LTkgNi0xMyAxIDMgMyA0IDQgNC0yLTggMC0xNSAyLTIzeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPgo=">
+<style>
+:root{--bg:#070b17;--panel:#0e1530;--glass:rgba(255,255,255,.05);--line:rgba(255,255,255,.14);--text:#e8edff;--muted:#8e9bc4;--cyan:#22d3ee;--violet:#7c5cff;--err:#ff5d73;--ok:#2ee59d;--inp:rgba(7,11,23,.65);--g1:rgba(124,92,255,.28);--g2:rgba(34,211,238,.22);color-scheme:dark}
+[data-theme=light]{--bg:#eef2fb;--panel:#fff;--glass:rgba(255,255,255,.8);--line:rgba(20,30,70,.16);--text:#14204a;--muted:#5b6890;--inp:#fff;--g1:rgba(124,92,255,.18);--g2:rgba(34,211,238,.22);color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg) radial-gradient(600px 400px at 10% 10%,var(--g1),transparent 60%) no-repeat,radial-gradient(600px 400px at 95% 90%,var(--g2),transparent 60%) no-repeat;color:var(--text);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.shell{width:100%;max-width:980px;display:grid;grid-template-columns:330px 1fr;background:var(--glass);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden}
+.side{padding:34px 28px;display:flex;flex-direction:column;gap:24px;background:linear-gradient(170deg,var(--g1),transparent 75%);border-right:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.15rem}.logo img{width:36px;height:36px}
+.side h2{font-size:1.55rem;line-height:1.25}.side p{color:var(--muted);font-size:.92rem;line-height:1.55;margin-top:10px}
+.steps{list-style:none;display:flex;flex-direction:column;gap:14px}
+.steps li{display:flex;gap:12px;align-items:center;font-size:.92rem;color:var(--muted)}
+.steps b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);font-size:.8rem;flex:none}
+.steps li.active{color:var(--text);font-weight:600}.steps li.active b{border-color:var(--cyan);color:var(--cyan)}
+.steps li.done b{background:linear-gradient(135deg,var(--violet),var(--cyan));border-color:transparent;color:#fff}
+.secure{margin-top:auto;font-size:.8rem;color:var(--muted);display:flex;gap:8px;align-items:center}.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+.main{padding:34px}
+.progress{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin-bottom:8px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan));transition:width .4s}
+.pct{font-size:.8rem;color:var(--muted);margin-bottom:18px}
+h1{font-size:1.5rem;margin-bottom:4px}.sub{color:var(--muted);font-size:.92rem;margin-bottom:6px}.note{font-size:.8rem;color:var(--muted);margin-bottom:18px}
+.req{color:var(--err);font-weight:700}
+.step{display:none;grid-template-columns:1fr 1fr;gap:16px}.step.show{display:grid;animation:in .3s}@keyframes in{from{opacity:0;transform:translateX(12px)}}
+.full{grid-column:1/-1}
+label.t{display:block;font-size:.84rem;font-weight:600;margin-bottom:7px;color:var(--text)}
+.ctl{position:relative}
+.in,select,textarea{width:100%;padding:12px 14px;font:inherit;font-size:.96rem;color:var(--text);background:var(--inp);border:1.5px solid var(--line);border-radius:12px;transition:.2s}
+textarea{resize:vertical;min-height:80px}
+.in:focus,select:focus,textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(34,211,238,.15)}
+.invalid{border-color:var(--err)!important}.valid{border-color:rgba(46,229,157,.6)}
+.error{color:var(--err);font-size:.78rem;margin-top:6px;min-height:1em}
+.eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--cyan);font-weight:600;font-size:.8rem;cursor:pointer;padding:6px}
+.meter{height:5px;border-radius:5px;background:var(--line);margin-top:8px;overflow:hidden}.meter span{display:block;height:100%;width:0;transition:.3s}
+.mtxt{font-size:.76rem;color:var(--muted);margin-top:4px}
+.seg{display:flex;gap:8px}.seg label{flex:1;cursor:pointer}.seg input{position:absolute;opacity:0}
+.seg span{display:block;text-align:center;padding:11px 4px;border-radius:12px;font-size:.9rem;border:1.5px solid var(--line);background:var(--inp);color:var(--muted)}
+.seg input:checked+span{color:var(--text);border-color:var(--cyan);background:rgba(34,211,238,.14)}
+.chk{display:flex;gap:10px;align-items:center;font-size:.88rem;cursor:pointer}.chk input{width:18px;height:18px;accent-color:var(--violet)}
+.btns{display:flex;gap:12px;margin-top:22px}
+.btn{flex:1;padding:14px;font:inherit;font-weight:700;color:#04101f;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,var(--cyan),var(--violet));box-shadow:0 10px 28px rgba(124,92,255,.35);transition:.15s}
+.btn:hover{transform:translateY(-2px)}.btn:disabled{opacity:.6;cursor:wait;transform:none}
+.btn.ghost{background:transparent;color:var(--text);border:1.5px solid var(--line);box-shadow:none;flex:.5}
+footer{margin-top:22px;text-align:center;font-size:.78rem;color:var(--muted)}
+.theme{position:fixed;top:14px;right:14px;z-index:15;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--glass);color:var(--text);font-size:1.1rem;cursor:pointer}
+#toast{position:fixed;top:20px;left:50%;transform:translate(-50%,-120px);padding:12px 20px;border-radius:12px;font-size:.9rem;font-weight:600;z-index:40;transition:.4s;background:var(--panel);border:1px solid var(--err);color:var(--err);max-width:90vw;text-align:center}#toast.show{transform:translate(-50%,0)}
+#loader{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:50;transition:opacity .4s}#loader.hide{opacity:0;pointer-events:none}
+.spin{width:44px;height:44px;border:4px solid var(--line);border-top-color:var(--cyan);border-radius:50%;animation:r .8s linear infinite}@keyframes r{to{transform:rotate(360deg)}}
+.overlay{position:fixed;inset:0;background:rgba(4,7,16,.8);backdrop-filter:blur(6px);display:none;place-items:center;z-index:30;padding:20px}.overlay.show{display:grid}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:32px 26px;max-width:380px;width:100%;text-align:center}
+.modal h3{margin:8px 0}.modal p{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+.rid{font-family:ui-monospace,Consolas,monospace;padding:11px;border-radius:10px;border:1px dashed var(--cyan);color:var(--cyan);margin-bottom:18px}
+/* admin */
+.wrap{width:100%;max-width:1100px}.card{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px;backdrop-filter:blur(18px)}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.tools .in,.tools select{flex:1;min-width:150px}.tools .btn{flex:none;padding:12px 18px}
+.tbl{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{padding:11px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-weight:600}
+.del{background:none;border:1px solid var(--err);color:var(--err);border-radius:8px;padding:5px 10px;cursor:pointer}
+.stats{display:flex;gap:12px;flex-wrap:wrap}.stat{padding:10px 16px;border-radius:12px;border:1px solid var(--line)}.stat b{font-size:1.3rem;color:var(--cyan);display:block}
+@media(max-width:860px){.shell{grid-template-columns:1fr}.side{padding:22px;gap:12px;border:none;border-bottom:1px solid var(--line)}.steps,.secure{display:none}.main{padding:24px 20px}}
+@media(max-width:520px){.step{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+[hidden]{display:none!important}
+</style>
+<script>document.documentElement.dataset.theme = localStorage.getItem('t') || 'dark';</script>
+</head>
+<body>
+
+<div id="loader"><div class="spin"></div></div>
+<button class="theme" id="themeBtn" type="button" aria-label="Toggle theme">☀️</button>
+<div id="toast" role="alert"></div>
+
+<div id="regView">
+<div class="overlay" id="overlay"><div class="modal">
+  <div style="font-size:2.5rem">✅</div>
+  <h3>Registration complete</h3>
+  <p>Your details are saved. A verification link has been sent to your email.</p>
+  <div class="rid" id="rid"></div>
+  <button class="btn" id="closeBtn" type="button" style="width:100%">Register another student</button>
+</div></div>
+
+<div class="shell">
+  <aside class="side">
+    <div class="logo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjN2M1Y2ZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjJkM2VlIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTYiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMzMgMTBjMiA5LTYgMTItNiAyMCAwIDQgMyA2IDYgNy0xLTMgMS02IDMtOCA0IDQgNyA4IDcgMTNhMTEgMTEgMCAwMS0yMiAwYzAtNiA0LTkgNi0xMyAxIDMgMyA0IDQgNC0yLTggMC0xNSAyLTIzeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPgo=" alt=""> Ignite Club</div>
+    <div><h2>Start your academic journey</h2><p>Complete the registration in a few quick steps. Your data is validated instantly and stored securely in the cloud.</p></div>
+    <ul class="steps" id="steps">
+      <li><b>1</b> Account</li><li><b>2</b> Personal details</li><li><b>3</b> Course &amp; contact</li><li><b>4</b> Address</li>
+    </ul>
+    <div class="secure"><span class="dot"></span> Secured with Firebase</div>
+  </aside>
+
+  <main class="main">
+    <div class="progress"><span id="bar"></span></div>
+    <div class="pct" id="pct">0% completed</div>
+    <h1>Student registration</h1>
+    <p class="sub">Fill in the details below to create your student record.</p>
+    <p class="note"><span class="req">*</span> means required field</p>
+
+    <form id="regForm" novalidate>
+      <!-- Step 1: Account -->
+      <section class="step show">
+        <div class="full"><label class="t" for="email">Email address <span class="req">*</span></label>
+          <input class="in" type="email" id="email" placeholder="you@example.com" autocomplete="email"><div class="error" id="emailErr"></div></div>
+        <div class="full"><label class="t" for="password">Password <span class="req">*</span></label>
+          <div class="ctl"><input class="in" type="password" id="password" placeholder="Min 8 characters" autocomplete="new-password"><button type="button" class="eye" data-eye="password">Show</button></div>
+          <div class="meter"><span id="mbar"></span></div><div class="mtxt" id="mtxt">Use upper, lower case, number &amp; symbol</div><div class="error" id="passwordErr"></div></div>
+        <div class="full"><label class="t" for="confirm">Confirm password <span class="req">*</span></label>
+          <div class="ctl"><input class="in" type="password" id="confirm" placeholder="Re-enter password" autocomplete="new-password"><button type="button" class="eye" data-eye="confirm">Show</button></div>
+          <div class="error" id="confirmErr"></div></div>
+      </section>
+
+      <!-- Step 2: Personal -->
+      <section class="step">
+        <div class="full"><label class="t" for="name">Full name <span class="req">*</span></label>
+          <input class="in" id="name" placeholder="e.g. Priya Sharma" autocomplete="name"><div class="error" id="nameErr"></div></div>
+        <div><label class="t" for="roll">Roll number / Student ID <span class="req">*</span></label>
+          <input class="in" id="roll" placeholder="e.g. IC2026001" maxlength="15"><div class="error" id="rollErr"></div></div>
+        <div><label class="t" for="dob">Date of birth <span class="req">*</span></label>
+          <input class="in" type="date" id="dob"><div class="error" id="dobErr"></div></div>
+        <div class="full"><label class="t">Gender <span class="req">*</span></label>
+          <div class="seg" id="gender"><label><input type="radio" name="gender" value="Male"><span>Male</span></label><label><input type="radio" name="gender" value="Female"><span>Female</span></label><label><input type="radio" name="gender" value="Other"><span>Other</span></label></div>
+          <div class="error" id="genderErr"></div></div>
+      </section>
+
+      <!-- Step 3: Course & contact -->
+      <section class="step">
+        <div class="full"><label class="t" for="course">Course <span class="req">*</span></label>
+          <select id="course"><option value="">Select your course</option><option>B.Tech</option><option>BCA</option><option>B.Sc</option><option>B.Com</option><option>BA</option><option>MCA</option><option>MBA</option></select>
+          <div class="error" id="courseErr"></div></div>
+        <div class="full"><label class="t" for="phone">Phone number <span class="req">*</span></label>
+          <input class="in" type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="tel"><div class="error" id="phoneErr"></div></div>
+      </section>
+
+      <!-- Step 4: Address -->
+      <section class="step">
+        <div><label class="t" for="state">State <span class="req">*</span></label><select id="state"></select><div class="error" id="stateErr"></div></div>
+        <div><label class="t" for="city">City <span class="req">*</span></label>
+          <input class="in" id="city" list="cities" placeholder="Select or type city"><datalist id="cities"></datalist><div class="error" id="cityErr"></div></div>
+        <div><label class="t" for="pin">PIN code <span class="req">*</span></label>
+          <input class="in" id="pin" placeholder="6-digit PIN" maxlength="6" inputmode="numeric"><div class="error" id="pinErr"></div></div>
+        <div class="full"><label class="t" for="address">Address <span class="req">*</span></label>
+          <textarea id="address" placeholder="House no., street, area"></textarea><div class="error" id="addressErr"></div></div>
+        <div class="full"><label class="chk"><input type="checkbox" id="terms"> <span>I agree to the terms and conditions <span class="req">*</span></span></label><div class="error" id="termsErr"></div></div>
+      </section>
+
+      <div class="btns">
+        <button type="button" class="btn ghost" id="back" hidden>Back</button>
+        <button type="submit" class="btn" id="next">Next</button>
+      </div>
+    </form>
+    <footer>© <span id="yr"></span> Ignite Club. All rights reserved. · <a href="#admin" style="color:var(--cyan)">Admin</a></footer>
+  </main>
+</div>
+</div><!-- /regView -->
+
+<div class="wrap" id="adminView" hidden>
+  <p class="note"><a href="#" style="color:var(--cyan)">← Back to registration form</a></p>
+  <div class="card" id="login" style="max-width:420px;margin:auto">
+    <div class="logo" style="margin-bottom:14px"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjN2M1Y2ZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjJkM2VlIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTYiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMzMgMTBjMiA5LTYgMTItNiAyMCAwIDQgMyA2IDYgNy0xLTMgMS02IDMtOCA0IDQgNyA4IDcgMTNhMTEgMTEgMCAwMS0yMiAwYzAtNiA0LTkgNi0xMyAxIDMgMyA0IDQgNC0yLTggMC0xNSAyLTIzeiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPgo=" alt=""> Ignite Club Admin</div>
+    <form id="loginForm">
+      <label class="t" for="aem">Admin email</label><input class="in" type="email" id="aem" required style="margin-bottom:12px">
+      <label class="t" for="apw">Password</label><input class="in" type="password" id="apw" required>
+      <div class="error" id="lerr"></div>
+      <div class="btns"><button class="btn" type="submit">Log in</button></div>
+    </form>
+  </div>
+
+  <div class="card" id="panel" hidden>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h1>Registered students</h1><button class="btn ghost" id="logout" style="flex:none;padding:10px 18px">Log out</button>
+    </div>
+    <div class="stats" style="margin-top:14px"><div class="stat"><b id="sTotal">0</b>Total students</div><div class="stat"><b id="sToday">0</b>Registered today</div></div>
+    <div class="tools">
+      <input class="in" id="q" placeholder="Search name, email, roll, city...">
+      <select id="fc"><option value="">All courses</option><option>B.Tech</option><option>BCA</option><option>B.Sc</option><option>B.Com</option><option>BA</option><option>MCA</option><option>MBA</option></select>
+      <button class="btn" id="csv">Export CSV</button>
+    </div>
+    <div class="tbl"><table><thead><tr><th>Name</th><th>Roll</th><th>Email</th><th>Phone</th><th>Course</th><th>City, State</th><th>Date</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <p class="note" id="empty" style="margin:14px 0 0"></p>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ================= 1. FIREBASE CONFIG =================
+// 1) Firebase Console > Project settings > Your apps > Web app se config yahan paste karo
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+// 2) Admin ka email (same email firestore.rules mein bhi likho)
+const ADMIN_EMAILS = ["admin@example.com"];
+
+// Firebase library load na ho (offline / preview) to page crash nahi hoga
+const FB = typeof firebase !== "undefined";
+const _no = () => Promise.reject({ code: "firebase/not-loaded" });
+if (FB) firebase.initializeApp(firebaseConfig);
+const auth = FB ? firebase.auth() : { onAuthStateChanged() {}, signOut: () => Promise.resolve(), signInWithEmailAndPassword: _no, createUserWithEmailAndPassword: _no };
+const db = FB ? firebase.firestore() : null;
+
+/* ===== FIRESTORE RULES (Firebase Console > Firestore > Rules mein paste karo) =====
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email in ['admin@example.com'];
+    }
+    match /students/{uid} {
+      allow create: if request.auth != null && request.auth.uid == uid;
+      allow read: if isAdmin() || (request.auth != null && request.auth.uid == uid);
+      allow delete: if isAdmin();
+    }
+    // Roll number duplicate rokne ke liye: ek roll number sirf ek baar create ho sakta hai
+    match /rollNumbers/{roll} {
+      allow create: if request.auth != null;
+      allow read, delete: if isAdmin();
+    }
+  }
+}
+
+===== */
+
+// ================= 2. STUDENT REGISTRATION FORM =================
+(() => {
+  const $ = id => document.getElementById(id);
+  const CITIES = {
+    "Andhra Pradesh":["Visakhapatnam","Vijayawada","Guntur","Tirupati"],"Bihar":["Patna","Gaya","Muzaffarpur","Bhagalpur"],
+    "Delhi":["New Delhi","Dwarka","Rohini","Saket"],"Gujarat":["Ahmedabad","Surat","Vadodara","Rajkot"],
+    "Karnataka":["Bengaluru","Mysuru","Mangaluru","Hubballi"],"Kerala":["Kochi","Thiruvananthapuram","Kozhikode","Thrissur"],
+    "Madhya Pradesh":["Bhopal","Indore","Gwalior","Jabalpur"],"Maharashtra":["Mumbai","Pune","Nagpur","Nashik"],
+    "Punjab":["Ludhiana","Amritsar","Jalandhar","Patiala"],"Rajasthan":["Jaipur","Jodhpur","Udaipur","Kota"],
+    "Tamil Nadu":["Chennai","Coimbatore","Madurai","Salem"],"Telangana":["Hyderabad","Warangal","Nizamabad","Karimnagar"],
+    "Uttar Pradesh":["Lucknow","Kanpur","Varanasi","Noida","Agra"],"West Bengal":["Kolkata","Howrah","Durgapur","Siliguri"],"Other":[]
+  };
+  $("state").innerHTML = '<option value="">Select state</option>' + Object.keys(CITIES).map(s => `<option>${s}</option>`).join("");
+  $("state").addEventListener("change", () => {
+    $("cities").innerHTML = (CITIES[$("state").value] || []).map(c => `<option value="${c}">`).join("");
+    $("city").value = "";
+  });
+
+  // ---- Theme + footer + loader ----
+  const setIcon = () => $("themeBtn").textContent = document.documentElement.dataset.theme === "dark" ? "☀️" : "🌙";
+  setIcon();
+  $("themeBtn").onclick = () => {
+    const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = t; localStorage.setItem("t", t); setIcon();
+  };
+  $("yr").textContent = new Date().getFullYear();
+  if (location.protocol === "file:") setTimeout(() => toast("Firebase file:// par kaam nahi karta. Live Server / localhost se kholo."), 1200);
+  window.addEventListener("load", () => setTimeout(() => $("loader").classList.add("hide"), 500));
+
+  // ---- Validation rules (return error text or "") ----
+  const strong = v => /[a-z]/.test(v) && /[A-Z]/.test(v) && /\d/.test(v);
+  const rules = {
+    email: v => !v ? "Email is required." : !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? "Enter a valid email address." : "",
+    password: v => !v ? "Password is required." : v.length < 8 ? "Minimum 8 characters." : !strong(v) ? "Include upper case, lower case and a number." : "",
+    confirm: v => !v ? "Please confirm your password." : v !== $("password").value ? "Passwords do not match." : "",
+    name: v => !v ? "Name is required." : !/^[A-Za-z ]{3,}$/.test(v) ? "Use letters only (min 3 characters)." : "",
+    roll: v => !v ? "Roll number is required." : !/^[A-Za-z0-9-]{4,15}$/.test(v) ? "4-15 letters, numbers or hyphen." : "",
+    dob: v => !v ? "Date of birth is required." : new Date(v) > new Date() ? "Date cannot be in the future." : (Date.now() - new Date(v)) / 31557600000 < 15 ? "You must be at least 15 years old." : "",
+    gender: v => v ? "" : "Please select a gender.",
+    course: v => v ? "" : "Please select a course.",
+    phone: v => !v ? "Phone number is required." : !/^[6-9]\d{9}$/.test(v) ? "Enter a valid 10-digit mobile number." : "",
+    state: v => v ? "" : "Please select a state.",
+    city: v => v.length < 2 ? "City is required." : "",
+    pin: v => !v ? "PIN code is required." : !/^[1-9]\d{5}$/.test(v) ? "Enter a valid 6-digit PIN." : "",
+    address: v => !v ? "Address is required." : v.length < 10 ? "Address is too short (min 10 characters)." : "",
+    terms: v => v ? "" : "You must accept the terms to continue."
+  };
+  const STEPS = [["email","password","confirm"],["name","roll","dob","gender"],["course","phone"],["state","city","pin","address","terms"]];
+  const val = id => id === "terms" ? ($("terms").checked ? "1" : "")
+    : id === "gender" ? ((document.querySelector('input[name="gender"]:checked') || {}).value || "")
+    : $(id).value.trim();
+
+  function check(id, show = true) {
+    const msg = rules[id](val(id));
+    if (show) {
+      $(id + "Err").textContent = msg;
+      const el = $(id);
+      if (el.matches("input.in,select,textarea")) { el.classList.toggle("invalid", !!msg); el.classList.toggle("valid", !msg); }
+    }
+    return !msg;
+  }
+
+  // ---- Steps ----
+  let cur = 0;
+  const panels = document.querySelectorAll(".step"), lis = document.querySelectorAll("#steps li");
+  function showStep(n) {
+    cur = n;
+    panels.forEach((p, i) => p.classList.toggle("show", i === n));
+    lis.forEach((l, i) => { l.classList.toggle("active", i === n); l.classList.toggle("done", i < n); });
+    $("back").hidden = n === 0;
+    $("next").textContent = n === 3 ? "Register now" : "Next";
+  }
+  $("back").onclick = () => showStep(cur - 1);
+
+  // ---- Progress ----
+  function progress() {
+    const all = STEPS.flat(), done = all.filter(id => check(id, false)).length;
+    const p = Math.round(done / all.length * 100);
+    $("bar").style.width = p + "%"; $("pct").textContent = p + "% completed";
+  }
+  Object.keys(rules).forEach(id => {
+    const els = id === "gender" ? document.querySelectorAll('input[name="gender"]') : [$(id)];
+    els.forEach(el => {
+      el.addEventListener(id === "terms" || id === "gender" || id === "state" || id === "course" ? "change" : "input", () => {
+        if (id === "password") { meter(); if ($("confirm").value) check("confirm"); }
+        if (el.classList.contains("invalid") || el.classList.contains("valid") || id === "gender" || id === "terms") check(id);
+        progress();
+      });
+    });
+  });
+  $("phone").addEventListener("input", e => e.target.value = e.target.value.replace(/\D/g, ""));
+  $("pin").addEventListener("input", e => e.target.value = e.target.value.replace(/\D/g, ""));
+  $("roll").addEventListener("input", e => e.target.value = e.target.value.toUpperCase());
+
+  // ---- Password strength + show/hide ----
+  function meter() {
+    const v = $("password").value;
+    const s = [v.length >= 8, /[a-z]/.test(v) && /[A-Z]/.test(v), /\d/.test(v), /[^A-Za-z0-9]/.test(v)].filter(Boolean).length;
+    const L = [["0%","#ff5d73",""],["25%","#ff5d73","Weak"],["50%","#ffb020","Fair"],["75%","#22d3ee","Good"],["100%","#2ee59d","Strong"]][v ? s : 0];
+    $("mbar").style.width = L[0]; $("mbar").style.background = L[1];
+    $("mtxt").textContent = v ? "Password strength: " + L[2] : "Use upper, lower case, number & symbol";
+  }
+  document.querySelectorAll(".eye").forEach(b => b.onclick = () => {
+    const i = $(b.dataset.eye), show = i.type === "password";
+    i.type = show ? "text" : "password"; b.textContent = show ? "Hide" : "Show";
+  });
+
+  // ---- Toast ----
+  let tm;
+  const toast = t => { $("toast").textContent = t; $("toast").classList.add("show"); clearTimeout(tm); tm = setTimeout(() => $("toast").classList.remove("show"), 4000); };
+
+  // ---- Submit ----
+  $("regForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const okStep = STEPS[cur].map(id => check(id)).every(Boolean);
+    if (!okStep) return toast("Please fix the highlighted fields.");
+    if (cur < 3) return showStep(cur + 1);
+    if (!FB) return toast("Firebase load nahi hua. File ko Chrome browser mein localhost se kholo.");
+
+    const btn = $("next"); btn.disabled = true; btn.textContent = "Saving...";
+    let user = null;
+    try {
+      user = (await auth.createUserWithEmailAndPassword(val("email"), $("password").value)).user;
+      const roll = val("roll");
+      const data = {
+        name: val("name"), email: val("email"), roll, dob: val("dob"), gender: val("gender"), course: val("course"),
+        phone: val("phone"), state: val("state"), city: val("city"), pin: val("pin"), address: val("address"),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      const batch = db.batch();
+      batch.set(db.collection("rollNumbers").doc(roll), { uid: user.uid });   // fails if roll already exists
+      batch.set(db.collection("students").doc(user.uid), data);
+      await batch.commit();
+      user.sendEmailVerification().catch(() => {});
+      $("rid").textContent = "REG-" + user.uid.slice(0, 8).toUpperCase();
+      await auth.signOut();
+      $("overlay").classList.add("show");
+    } catch (err) {
+      console.error(err);
+      if (err.code === "auth/email-already-in-use") { showStep(0); $("emailErr").textContent = "This email is already registered."; $("email").classList.add("invalid"); toast("Email already registered."); }
+      else if (err.code === "auth/weak-password") toast("Password is too weak.");
+      else if (user && err.code === "permission-denied") { await user.delete().catch(() => {}); showStep(1); $("rollErr").textContent = "This roll number is already registered."; toast("Roll number already registered."); }
+      else toast("Could not save (" + (err.code || err.message) + "). Check Firebase config, Auth and rules.");
+      if (user) auth.signOut().catch(() => {});
+    } finally { btn.disabled = false; btn.textContent = cur === 3 ? "Register now" : "Next"; }
+  });
+
+  $("closeBtn").onclick = () => {
+    $("overlay").classList.remove("show"); $("regForm").reset();
+    document.querySelectorAll(".valid,.invalid").forEach(el => el.classList.remove("valid", "invalid"));
+    meter(); showStep(0); progress();
+  };
+  showStep(0); progress();
+})();
+
+// ================= 3. ADMIN DASHBOARD =================
+
+(() => {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  let all = [], unsub = null;
+
+  $("loginForm").addEventListener("submit", async e => {
+    e.preventDefault(); $("lerr").textContent = "";
+    try { await auth.signInWithEmailAndPassword($("aem").value.trim(), $("apw").value); }
+    catch { $("lerr").textContent = "Invalid email or password."; }
+  });
+  $("logout").onclick = () => auth.signOut();
+
+  auth.onAuthStateChanged(user => {
+    if (unsub) { unsub(); unsub = null; }
+    const ok = user && ADMIN_EMAILS.includes(user.email);
+    if (user && !ok) { $("lerr").textContent = "This account is not an admin."; auth.signOut(); return; }
+    $("login").hidden = !!ok; $("panel").hidden = !ok;
+    if (!ok) return;
+    unsub = db.collection("students").orderBy("createdAt", "desc").onSnapshot(s => {
+      all = s.docs.map(d => ({ id: d.id, ...d.data() })); render();
+    }, () => { $("empty").textContent = "Could not load data. Check Firestore rules."; });
+  });
+
+  const dt = r => r.createdAt ? r.createdAt.toDate() : null;
+  function filtered() {
+    const q = $("q").value.toLowerCase(), c = $("fc").value;
+    return all.filter(r => (!c || r.course === c) && (!q || [r.name, r.email, r.roll, r.city, r.state, r.phone].join(" ").toLowerCase().includes(q)));
+  }
+  function render() {
+    const list = filtered(), today = new Date().toDateString();
+    $("sTotal").textContent = all.length;
+    $("sToday").textContent = all.filter(r => dt(r) && dt(r).toDateString() === today).length;
+    $("rows").innerHTML = list.map(r => `<tr><td>${esc(r.name)}</td><td>${esc(r.roll)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td>${esc(r.course)}</td><td>${esc(r.city)}, ${esc(r.state)}</td><td>${dt(r) ? dt(r).toLocaleDateString() : "-"}</td><td><button class="del" data-id="${esc(r.id)}">Delete</button></td></tr>`).join("");
+    $("empty").textContent = list.length ? "" : "No students found.";
+  }
+  $("q").oninput = render; $("fc").onchange = render;
+
+  $("rows").addEventListener("click", async e => {
+    const id = e.target.dataset.id; if (!id) return;
+    const r = all.find(x => x.id === id);
+    if (!confirm("Delete " + r.name + "'s record?")) return;
+    const b = db.batch();
+    b.delete(db.collection("students").doc(id));
+    if (r.roll) b.delete(db.collection("rollNumbers").doc(r.roll));
+    await b.commit().catch(() => alert("Delete failed. Check Firestore rules."));
+  });
+
+  $("csv").onclick = () => {
+    const cols = ["name","roll","email","phone","dob","gender","course","state","city","pin","address"];
+    const q = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+    const csv = [cols.join(",")].concat(filtered().map(r => cols.map(c => q(r[c])).join(","))).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv" }));
+    a.download = "students.csv"; a.click();
+  };
+})();
+
+// ---- Simple routing: index.html = form, index.html#admin = admin dashboard ----
+(() => {
+  const go = () => { const a = location.hash === "#admin"; document.getElementById("regView").hidden = a; document.getElementById("adminView").hidden = !a; window.scrollTo(0, 0); };
+  window.addEventListener("hashchange", go); go();
+})();
+</script>
+</body>
+</html>
